@@ -7,12 +7,6 @@ export PYBUILD_DESTDIR_python3=debian/python3-${PYBUILD_NAME}
 %:
 	dh $@ --with python3 --buildsystem=pybuild
 
-
-override_dh_auto_test:
-ifeq ($(filter nocheck,$(DEB_BUILD_OPTIONS)),)
-	pytest-3 lexicon/tests/ -k "not namecheap and not route53 and not subreg and not transip and not plesk and not henet and not easyname and not localzone and not auto and not hetzner and not gratisdns and not gransy"
-endif
-
 override_dh_auto_install:
 	dh_auto_install
 	dh_movefiles --package=lexicon --sourcedir=$(PYBUILD_DESTDIR_python3) usr/bin
