@@ -1,0 +1,50 @@
+Source: lexicon
+Maintainer: Ana Custura <ana@netstat.org.uk>
+Uploaders: Debian Python Team <team+python@tracker.debian.org>
+Section: python
+Priority: optional
+Build-Depends: debhelper-compat (= 12),
+               python3-all,
+               dh-python,
+               python3-boto3,
+               python3-cryptography (>= 1.3.4),
+               python3-future,
+               python3-idna (>= 2.0.0~),
+               python3-mock (>= 2.0.0~),
+               python3-openssl (>= 0.14~),
+               python3-pytest,
+               python3-setuptools,
+               python3-softlayer,
+               python3-tldextract,
+               python3-vcr,
+               python3-yaml
+Standards-Version: 4.4.1
+Vcs-Browser: https://salsa.debian.org/python-team/packages/python-lexicon
+Vcs-Git: https://salsa.debian.org/python-team/packages/python-lexicon.git
+Homepage: https://github.com/AnalogJ/lexicon
+Testsuite: autopkgtest-pkg-python
+
+Package: python3-lexicon
+Architecture: all
+Depends: ${python3:Depends},
+         ${misc:Depends}
+Recommends: python3-boto3,
+            python3-softlayer
+Description: Manipulate DNS records on various DNS providers (Python 3)
+ Lexicon provides a way to manipulate DNS records on multiple DNS
+ providers in a standardized way. Lexicon was designed to be used in
+ automation, specifically letsencrypt.
+ .
+ This package installs the library for Python 3.
+
+Package: lexicon
+Architecture: all
+Depends: ${python3:Depends},
+         ${misc:Depends},
+         python3-lexicon (= ${binary:Version})
+Description: CLI for manipulating DNS records on various DNS providers (Python 3)
+ Lexicon provides a way to manipulate DNS records on multiple DNS
+ providers in a standardized way. Lexicon was designed to be used in
+ automation, specifically letsencrypt.
+ .
+ This package installs the tool for Python 3.
