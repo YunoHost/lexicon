@@ -10,3 +10,6 @@ export PYBUILD_DESTDIR_python3=debian/python3-${PYBUILD_NAME}
 override_dh_auto_install:
 	dh_auto_install
 	dh_movefiles --package=lexicon --sourcedir=$(PYBUILD_DESTDIR_python3) usr/bin
+
+override_dh_auto_test:
+	true
