@@ -1,4 +1,7 @@
-"""Module provider for Yandex"""
+"""Module provider for Yandex PDD
+
+API doc: https://yandex.com/dev/domain/doc/reference/dns-add.html
+"""
 import json
 import logging
 
@@ -17,15 +20,15 @@ NAMESERVER_DOMAINS = ["yandex.com"]
 
 
 def provider_parser(subparser):
-    """Generate parser provider for Yandex"""
+    """Generate parser provider for Yandex PDD"""
     subparser.add_argument(
         "--auth-token",
-        help="specify PDD token (https://tech.yandex.com/domain/doc/concepts/access-docpage/)",
+        help="specify PDD token (https://yandex.com/dev/domain/doc/concepts/access.html)",
     )
 
 
 class Provider(BaseProvider):
-    """Provider class for Yandex"""
+    """Provider class for Yandex PDD"""
 
     def __init__(self, config):
         super(Provider, self).__init__(config)
@@ -72,11 +75,26 @@ class Provider(BaseProvider):
                 next_url = None
 
             for record in payload["records"]:
+                if record["type"] == "MX":
+                    assembled_content = f"{record['priority']} {record['content']}"
+                if record["type"] == "SRV":
+                    if "target" in record:
+                        srv_target = record["target"]
+                    else:
+                        srv_target = record["content"]
+                    assembled_content = f"{record['priority']} {record['weight']} {record['port']} {srv_target}"
+                else:
+                    assembled_content = record.get("content")
+                record_name = (
+                    f"{record['subdomain']}.{self.domain_id}"
+                    if record["subdomain"] != "@"
+                    else self.domain_id
+                )
                 processed_record = {
                     "type": record["type"],
-                    "name": f"{record['subdomain']}.{self.domain_id}",
+                    "name": record_name,
                     "ttl": record["ttl"],
-                    "content": record.get("content"),
+                    "content": assembled_content,
                     "id": record["record_id"],
                 }
                 records.append(processed_record)
@@ -97,15 +115,15 @@ class Provider(BaseProvider):
         LOGGER.debug("list_records: %s", records)
         return records
 
-    # Just update existing record. Domain ID (domain) and Identifier (record_id) is mandatory
+    # Just update existing record. If Identifier is not provided, update the latest entry with matching name and rtype.
     def _update_record(self, identifier, rtype=None, name=None, content=None):
 
         if not identifier:
-            LOGGER.debug(
-                "Domain ID (domain) and Identifier (record_id) "
-                "is mandatory parameters for this case"
-            )
-            return False
+            # get existing entries, and pick the last one for update
+            records = self._list_records(rtype=rtype, name=name)
+            if not records:
+                return False
+            identifier = records[-1]["id"]
 
         data = ""
         if rtype:

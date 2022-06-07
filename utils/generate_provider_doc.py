@@ -2,57 +2,60 @@
 import argparse
 import importlib
 import os
+import re
+import shutil
+from os.path import dirname, join
+from typing import List
 
 from lexicon import discovery
 
+_ROOT = dirname(dirname(__file__))
+_DOCS = os.path.join(_ROOT, "docs")
+_PROVIDERS = os.path.join(_DOCS, "providers")
 
-def main():
+
+def main() -> None:
     providers = [
         provider for provider in discovery.find_providers().keys() if provider != "auto"
     ]
 
-    output = f"""\
+    shutil.rmtree(_PROVIDERS, ignore_errors=True)
+    os.mkdir(_PROVIDERS)
+
+    _generate_table(providers)
+
+    output = [
+        """
 Providers available
 -------------------
 
 The following Lexicon providers are available:
 
-{_generate_table(["{0}_".format(provider) for provider in providers])}
+.. include:: ../README.rst
+    :start-after: tag: providers-table-begin
+    :end-before: tag: providers-table-end
 
 List of options
 ---------------
-
 """
+    ]
 
     for provider in providers:
-        provider_module = importlib.import_module("lexicon.providers." + provider)
-        parser = argparse.ArgumentParser()
-        provider_module.provider_parser(parser)
-
-        provider_content = [
+        _generate_provider_details(provider)
+        output.append(
             f"""\
 .. _{provider}:
-
-{provider}
+.. include:: providers/{provider}.rst
 """
-        ]
-        for action in parser._actions:
-            if action.dest == "help":
-                continue
+        )
 
-            provider_content.append(
-                f"""\
-    * ``{action.dest}`` {action.help.capitalize().replace("`", "'")}
-"""
-            )
-        output = output + "".join(provider_content) + "\n"
-
-    with open(os.path.join("docs", "providers_options.rst"), "w") as f:
-        f.write(output)
+    with open(join(_DOCS, "providers_options.rst"), "w") as f:
+        f.write("\n".join(output))
 
 
-def _generate_table(items):
-    nb_columns = 4
+def _generate_table(providers: List[str]) -> None:
+    items = [f"{provider}_" for provider in providers]
+    nb_columns = 5
     max_width = max(len(item) for item in items) + 1
     delimiter = f"+{'-' * (max_width + 1)}" * nb_columns + "+"
 
@@ -67,7 +70,67 @@ def _generate_table(items):
         line = "".join(f"| {item:<{max_width}}" for item in data) + "|"
         table = [*table, line, delimiter]
 
-    return "\n".join(table)
+    with open(join(_ROOT, "README.rst")) as f:
+        readme_lines = f.readlines()
+
+    begin_idx = readme_lines.index(".. tag: providers-table-begin\n")
+    end_idx = readme_lines.index(".. tag: providers-table-end\n")
+
+    readme_lines = (
+        readme_lines[: begin_idx + 1]
+        + ["\n"]
+        + [f"{item}\n" for item in table]
+        + ["\n"]
+        + readme_lines[end_idx:]
+    )
+
+    with open(join(_ROOT, "README.rst"), "w") as f:
+        f.writelines(readme_lines)
+
+
+def _generate_provider_details(provider: str) -> None:
+    provider_module = importlib.import_module("lexicon.providers." + provider)
+    parser = argparse.ArgumentParser()
+    provider_module.provider_parser(parser)
+
+    output = [provider]
+
+    for action in parser._actions:
+        if action.dest == "help":
+            continue
+
+        output.append(
+            f"""\
+    * ``{action.dest}`` {action.help.capitalize().replace("`", "'")}
+"""
+        )
+
+    if parser.description:
+        output.append(
+            f"""
+.. note::
+   
+{_cleanup_description(parser.description)}
+
+"""
+        )
+
+    with open(join(_PROVIDERS, f"{provider}.rst"), "w") as f:
+        f.write("\n".join(output))
+
+
+def _cleanup_description(description: str):
+    lines = description.split(os.linesep)
+    if not lines:
+        return ""
+    if not lines[0]:
+        lines.pop(0)
+    if not lines:
+        return ""
+    match = re.match(r"^(\s*)\S.*$", lines[0])
+    first_ident = len(match.group(1)) if match else 0
+    lines = [f"   {line[first_ident:]}" for line in lines]
+    return os.linesep.join(lines)
 
 
 if __name__ == "__main__":

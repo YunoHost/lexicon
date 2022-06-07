@@ -29,7 +29,7 @@ lexicon/providers/dnsimple.py       @analogj
 lexicon/providers/dnsmadeeasy.py    @analogj @nydr
 lexicon/providers/dnspark.py        @analogj
 lexicon/providers/dnspod.py         @analogj
-lexicon/providers/dreamhost.py      @chhsiao1981
+lexicon/providers/dreamhost.py      @chhsiao1981 @ryan953
 lexicon/providers/dynu.py           @HerrFolgreich
 lexicon/providers/easydns.py        @analogj
 lexicon/providers/easyname.py       @astzweig @rqelibari
@@ -53,8 +53,10 @@ lexicon/providers/linode4.py        @trinopoty
 lexicon/providers/localzone.py      @ags-slc
 lexicon/providers/luadns.py         @analogj
 lexicon/providers/memset.py         @tnwhitwell
+lexicon/providers/misaka.py         @misakaio @ym
 lexicon/providers/mythicbeasts.py   @lexitus
 lexicon/providers/namecheap.py      @pschmitt @rbelnap
+lexicon/providers/namecom.py        @Jamim
 lexicon/providers/namesilo.py       @analogj
 lexicon/providers/netcup.py         @coldfix
 lexicon/providers/nfsn.py           @tersers
@@ -67,7 +69,7 @@ lexicon/providers/ovh.py            @adferrand
 lexicon/providers/plesk.py          @ctron
 lexicon/providers/pointhq.py        @analogj
 lexicon/providers/powerdns.py       @insertjokehere @splashx
-lexicon/providers/rackspace.py      @rmarscher
+lexicon/providers/rackspace.py      @rmarscher @mattgauf
 lexicon/providers/rage4.py          @analogj
 lexicon/providers/rcodezero.py      @MikeAT
 lexicon/providers/route53.py        @eadmundo
@@ -77,8 +79,11 @@ lexicon/providers/softlayer.py      @adherzog
 lexicon/providers/subreg.py         @oldium
 lexicon/providers/transip.py        @LordGaav @yorickvP
 lexicon/providers/ultradns.py	    @abligh
+lexicon/providers/valuedomain.py    @wak109
 lexicon/providers/vercel.py         @adferrand
 lexicon/providers/vultr.py          @analogj
+lexicon/providers/webgo.py          @mod242
 lexicon/providers/yandex.py         @kharkevich
+lexicon/providers/yandexcloud.py    @paskal
 lexicon/providers/zilore.py         @adferrand
 lexicon/providers/zonomi.py         @jarossi

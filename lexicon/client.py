@@ -2,7 +2,7 @@
 import importlib
 import logging
 import os
-from typing import Dict, List, Optional, Type, Union
+from typing import Dict, List, Optional, Type, Union, cast
 
 import tldextract  # type: ignore
 
@@ -42,7 +42,9 @@ class Client(object):
             domain_extractor = tldextract.TLDExtract(
                 cache_file=_get_tldextract_cache_path(), include_psl_private_domains=True  # type: ignore
             )
-        domain_parts = domain_extractor(self.config.resolve("lexicon:domain"))
+        domain_parts = domain_extractor(
+            cast(str, self.config.resolve("lexicon:domain"))
+        )
         runtime_config["domain"] = f"{domain_parts.domain}.{domain_parts.suffix}"
 
         delegated = self.config.resolve("lexicon:delegated")
@@ -112,8 +114,8 @@ class Client(object):
         else:
             if not available:
                 raise ProviderNotAvailableError(
-                    f"This provider ({provider_name}) has required dependencies that are missing. "
-                    f"Please install lexicon[{provider_name}] first."
+                    f"This provider ({provider_name}) has required extra dependencies that are missing. "
+                    f"Please run `pip install lexicon[{provider_name}]` first before using it."
                 )
 
         if not self.config.resolve("lexicon:action"):

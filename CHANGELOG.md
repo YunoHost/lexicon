@@ -2,10 +2,106 @@
 
 ## master - CURRENT
 
+## 3.11.2 - 16/05/2022
+### Changed
+* Add support of record update without an identifier in `yandex` provider (#1253)
+
+## 3.11.1 - 15/05/2022
+### Modified
+* Improve the Oracle Cloud DNS (`oci`) provider on the authentication mechanism (#1251)
+* Add API documentation to Oracle Cloud DNS (#1247)
+
+## 3.11.0 - 06/05/2022
+### Added
+* Add `namecom` provider (#1212)
+
+### Modified
+* Fix TLD with two parts for `namecheap` provider (#1237)
+* Fix `entity__name` parsing in `easyname` provider (#1230)
+
+## 3.10.0 - 01/05/2022
+### Added
+* Add `--zone-id` CLI flag for `route53` provider
+* Add `yandexcloud` provider dedicated to Yandex Cloud solution (#1213)
+
+### Modified
+* Improve documentation with auto-generation
+* Clarify that `yandex` provider supports Yandex PDD only (#1211)
+* Use UUIDs in `aliyun` provider to avoid nonce collisions
+
+## 3.9.5 - 18/04/2022
+### Added
+* Add `misaka` provider (#1205 #556)
+
+### Modified
+* Fix `yandex` provider for MX/SRV records (#1201)
+* Fix `joker` provider by using POST requests instead of GET (#1201)
+
+## 3.9.4 - 14/02/2022
+### Added
+* Add `webgo` provider (#1102)
+
+### Modified
+* Extend possible record types list for `dreamhost` provider (#1110)
+
+## 3.9.3 - 27/01/2022
+### Modified
+* Fix compatibility with requests>=2 in `transip` provider
+
+## 3.9.2 - 17/01/2022
+### Modified
+* Fix configuration reference
+
+## 3.9.1 - 17/01/2022
+### Modified
+* Reimplement the `transip` provider using the new REST v6 API
+
+## 3.9.0 - 06/01/2022
+## Deleted
+* Drop Python 3.6 support
+
+## 3.8.5 - 29/12/2021
+### Modified
+* Complete redesign of the update and delete actions in GoDaddy provider to fix several issues
+
+## 3.8.4 - 28/12/2021
+### Added
+* Add the Value Domain provider (#1018)
+
+### Modified
+* Fix issue on the GoDaddy provider for update actions
+
+## 3.8.3 - 12/11/2021
+### Modified
+* Fix `plesk` provider (#1004)
+* Update nameservers in `namecheap` provider (#911)
+
+## 3.8.2 - 03/11/2021
+### Modified
+* Fix `dreamhost` provider since deprecated API endpoints are removed (#998)
+
+## 3.8.1 - 15/10/2021
+### Modified
+* Fix `rackspace` provider by not sending a body request for `GET` requests (#989)
+
+## 3.8.0 - 04/10/2021
+### Modified
+* `transip` provider is deprecated and not maintained anymore, it will be replaced
+   soon by a new `transip` provider build on top of the TransIP v6 REST API
+
+## Deleted
+* `transip` provider is not part of the `full` dns-lexicon extra, you need to install
+  explicitly the `transip` extra instead
+
+## 3.7.1 - 04/10/2021
+### Modified
+* Allow to use newer versions of `cryptography`
+* Fix doc about unit tests
+
 ## 3.7.0 - 09/08/2021
 ### Added
 * Add the Vercel provider (formerly known as Zeit)
-* Add the OpenShift Cloud Infrastructure (OCI) DNS provider (#860)
+* Add the Oracle Cloud Infrastructure (OCI) DNS provider (#860)
 
 ### Modified
 * Keep old Zeit provider for compatibility purpose with deprecation notices
