@@ -1,3 +1,9 @@
+lexicon (3.11.2) unstable; urgency=medium
+
+  * Bump to version 3.11.2
+
+ -- ljf <ljf+yunohost@grimaud.me>
+
 lexicon (3.7.0) unstable; urgency=medium
 
   * Bump to version 3.7.0
