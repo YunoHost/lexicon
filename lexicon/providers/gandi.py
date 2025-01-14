@@ -266,7 +266,7 @@ class Provider(BaseProvider):
         default_headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": "Apikey " + self._get_provider_option("auth_token"),
+            "Authorization": "Bearer " + self._get_provider_option("auth_token"),
         }
         if not url.startswith(self.api_endpoint):
             url = self.api_endpoint + url
